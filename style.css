@@ -1,15 +1,14 @@
 /* --- Basic Setup & Variables --- */
 :root {
-    --bg-color: #0a0a1a; /* Very dark, deep blue */
-    --text-color: #e0e0e0; /* Soft off-white for readability */
-    --accent-cyan: #00ffff; /* Electric cyan for titles and highlights */
-    --accent-pink: #ff69b4; /* Hint of pink from the Ligas series */
-    --accent-green: #90ee90; /* Hint of green from the Rice series */
-    --link-color: #61dafb; /* A slightly softer blue for links */
-    --heading-font: 'Roboto Mono', monospace;
-    --body-font: 'Source Sans 3', sans-serif;
+    --bg-color: #0a0a1a;
+    --text-color: #e0e0e0;
+    --accent-cyan: #00ffff;
+    --accent-pink: #ff69b4;
+    --accent-green: #90ee90;
+    --link-color: #61dafb;
+    --heading-font: 'Syne Mono', monospace;
+    --body-font: 'Nunito', sans-serif;
 }
-
 html {
     scroll-behavior: smooth;
 }
@@ -35,8 +34,15 @@ body {
 section, header, footer {
     margin-bottom: 4rem;
     padding-bottom: 2rem;
+	
     border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 }
+
+header {
+font-family: var(--heading-font);
+}
+
+
 
 footer {
     border-bottom: none;
