@@ -88,14 +88,27 @@ h1 {
     color: var(--text-color);
 }
 
+/* --- Header Element Styling --- */
 .collaborators {
     text-align: center;
-    font-size: 1.1rem;
-    margin-top: 0;
-    margin-bottom: 3rem;
-    color: var(--text-color);
+    font-size: 0.9rem;
+    max-width: 650px; /* Keeps the long line from stretching too wide */
+    margin: 1.5rem auto;
+    line-height: 1.6;
+    color: rgba(255, 255, 255, 0.75); /* Slightly muted for readability */
 }
 
+.portfolio-link {
+    text-align: center;
+    font-family: var(--heading-font); /* Uses your mono/technical font */
+    font-size: 1.1rem;
+    margin: 0 auto 2.5rem auto; /* Adds space before the header border */
+}
+
+/* Optional: Adds a special hover effect for the portfolio link */
+.portfolio-link a:hover {
+    text-shadow: 0 0 8px rgba(0, 255, 255, 0.4);
+}
 
 h2 {
     font-size: 2rem;
@@ -248,3 +261,4 @@ audio {
     box-shadow: 0 0 15px rgba(0, 255, 255, 0.3);
 }
 */
+
