@@ -50,6 +50,21 @@ footer {
     color: rgba(255, 255, 255, 0.6);
 }
 
+/* --- Link Styling --- */
+a {
+    color: var(--link-color);
+    text-decoration: underline;
+    text-decoration-style: wavy;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 4px; /* Adjusts space between text and underline */
+    transition: color 0.2s ease-in-out, text-decoration-color 0.2s ease-in-out;
+}
+
+a:hover {
+    color: var(--accent-cyan);
+    text-decoration-color: var(--accent-cyan);
+}
+
 /* --- Typography --- */
 h1, h2, h3 {
     font-family: var(--heading-font);
