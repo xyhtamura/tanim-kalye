@@ -1,0 +1,139 @@
+/* --- Basic Setup & Variables --- */
+:root {
+    --bg-color: #0a0a1a; /* Very dark, deep blue */
+    --text-color: #e0e0e0; /* Soft off-white for readability */
+    --accent-cyan: #00ffff; /* Electric cyan for titles and highlights */
+    --accent-pink: #ff69b4; /* Hint of pink from the Ligas series */
+    --accent-green: #90ee90; /* Hint of green from the Rice series */
+    --link-color: #61dafb; /* A slightly softer blue for links */
+    --heading-font: 'Roboto Mono', monospace;
+    --body-font: 'Source Sans 3', sans-serif;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    font-family: var(--body-font);
+    font-size: 18px;
+    line-height: 1.7;
+    margin: 0;
+    padding: 2rem 1rem;
+    display: flex;
+    justify-content: center;
+}
+
+/* --- Layout & Container --- */
+.container {
+    max-width: 800px;
+    width: 100%;
+}
+
+section, header, footer {
+    margin-bottom: 4rem;
+    padding-bottom: 2rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+footer {
+    border-bottom: none;
+    text-align: center;
+    color: rgba(255, 255, 255, 0.6);
+}
+
+/* --- Typography --- */
+h1, h2, h3 {
+    font-family: var(--heading-font);
+    font-weight: 400;
+    color: var(--accent-cyan);
+    text-shadow: 0 0 8px rgba(0, 255, 255, 0.4);
+    letter-spacing: 1px;
+}
+
+h1 {
+    font-size: 3rem;
+    margin-bottom: 0.5rem;
+    text-align: center;
+}
+
+.artist-name {
+    text-align: center;
+    font-size: 1.6rem;
+    margin-top: 0;
+    margin-bottom: 1rem;
+    color: var(--text-color);
+}
+
+.collaborators {
+    text-align: center;
+    font-size: 1.1rem;
+    margin-top: 0;
+    margin-bottom: 3rem;
+    color: var(--text-color);
+}
+
+
+h2 {
+    font-size: 2rem;
+}
+
+h3 {
+    font-size: 1.5rem;
+    color: var(--link-color);
+    text-shadow: none;
+}
+
+p {
+    margin-bottom: 1.5rem;
+}
+
+strong {
+    color: var(--accent-cyan);
+    font-weight: 600;
+}
+
+em {
+    font-style: italic;
+    color: var(--link-color);
+}
+
+ul {
+    list-style-type: none;
+    padding-left: 0;
+}
+
+ul li {
+    padding-left: 1.5em;
+    position: relative;
+    margin-bottom: 0.5em;
+}
+
+ul li::before {
+    content: '›';
+    position: absolute;
+    left: 0;
+    color: var(--accent-cyan);
+    font-weight: bold;
+}
+
+/* --- Media Placeholders --- */
+.media-section {
+    background-color: rgba(0, 0, 0, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 2rem;
+    border-radius: 8px;
+}
+
+.media-item {
+    margin-top: 1.5rem;
+}
+
+/* --- Collaborators Footer --- */
+.collaborators p {
+    font-size: 0.9rem;
+    line-height: 1.4;
+    margin: 0.5rem 0;
+}
