@@ -5,14 +5,151 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tanim-Kalye</title>
     <link rel="stylesheet" href="style.css">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&family=Lexend:wght@300;400;600&family=Nunito:wght@300;400;600&family=Playfair+Display:wght@400;700&family=Space+Grotesk:wght@400;700&family=Syne+Mono&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&family=Lexend:wght@300;400;600&family=Nunito:wght@300;400;600&family=Playfair+Display:wght@400;700&family=Space+Grotesk:wght@400;700&family=Syne+Mono&display=swap" rel="stylesheet">
+    
+    <style>
+        /* Embedded styles for the Digital Acetate Viewer */
+        .projector-section {
+            background: #1a1a1a; /* Dark background as requested */
+            color: #e0e0e0;
+            padding: 2rem;
+            border-radius: 12px;
+            margin-bottom: 3rem;
+            border: 1px solid #333;
+        }
+
+        .projector-interface {
+            display: flex;
+            flex-direction: column; /* Stack: Screen on top, controls below */
+            align-items: center;
+            gap: 2rem;
+        }
+
+        .projector-screen-container {
+            width: 100%;
+            max-width: 500px; /* Keeps the viewer size reasonable */
+            display: flex;
+            justify-content: center;
+        }
+
+        /* The Box representing the Acetate Stack */
+        .projector-screen {
+            position: relative;
+            width: 100%;
+            /* New Aspect Ratio: 929px / 1317px */
+            aspect-ratio: 929 / 1317; 
+            background-color: #ffffff; /* Default backlight */
+            box-shadow: 0 0 30px rgba(0,0,0,0.5); /* Stronger shadow for dark mode */
+            transition: background-color 0.3s ease;
+            border: 1px solid #555;
+            overflow: hidden;
+        }
+
+        .acetate-layer {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.4s ease;
+            mix-blend-mode: multiply; 
+        }
+        
+        .acetate-layer.visible {
+            opacity: 1;
+        }
+
+        /* Controls Area */
+        .controls {
+            width: 100%;
+            max-width: 900px;
+            background: #252525;
+            padding: 1.5rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .controls-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            border-top: 1px solid #444;
+            padding-top: 1.5rem;
+        }
+
+        .control-group h3 {
+            font-family: 'Syne Mono', monospace;
+            font-size: 1rem;
+            margin-bottom: 1rem;
+            color: #9cdcfe; /* Light blue accent for headers */
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .layer-toggle {
+            display: flex;
+            align-items: center;
+            margin-bottom: 0.5rem;
+            cursor: pointer;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.9rem;
+            color: #ccc;
+            transition: color 0.2s;
+        }
+        
+        .layer-toggle:hover {
+            color: white;
+        }
+
+        .layer-toggle input {
+            margin-right: 8px;
+            accent-color: #9cdcfe;
+            /* Default small size */
+        }
+
+        .backlight-control {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 15px;
+            width: 100%;
+        }
+
+        .reset-btn {
+            background: #444; 
+            color: white; 
+            border: 1px solid #555; 
+            padding: 6px 12px; 
+            border-radius: 4px; 
+            cursor: pointer; 
+            font-size: 0.85rem;
+            margin-left: auto; /* Pushes it to the right if in flex */
+        }
+        .reset-btn:hover {
+            background: #555;
+        }
+
+        /* Mobile adjustment */
+        @media (max-width: 600px) {
+            .controls-grid {
+                grid-template-columns: 1fr; /* Stack columns on small screens */
+                gap: 1rem;
+            }
+        }
+    </style>
 </head>
 <body>
 
     <main class="container">
-<header>
+        <header>
             <h1>Tanim-Kalye</h1>
             <p class="artist-name">
                Xyh Tamura
@@ -27,11 +164,98 @@
             </p>
         </header>
 
+        <!-- DIGITAL VIEWER SECTION -->
+        <section class="projector-section">
+            <p style="text-align: center; margin-bottom: 2rem; color: #aaa; font-size: 0.9rem;">
+                Toggle layers to overlay maps. Change backlight to simulate viewing conditions.
+            </p>
+            
+            <div class="projector-interface">
+                <!-- Screen on Top -->
+                <div class="projector-screen-container">
+                    <div class="projector-screen" id="projector-screen">
+                        <!-- Set 1 (All visible by default) -->
+                        <img src="KNLDiliman.png" id="layer-KNLDiliman" class="acetate-layer visible">
+                        <img src="KNLLigas.png" id="layer-KNLLigas" class="acetate-layer visible">
+                        <img src="KNLRice.png" id="layer-KNLRice" class="acetate-layer visible">
+                        
+                        <!-- Set 2 -->
+                        <img src="KNLDilimanb.png" id="layer-KNLDilimanb" class="acetate-layer">
+                        <img src="KNLLigasb.png" id="layer-KNLLigasb" class="acetate-layer">
+                        <img src="KNLRiceb.png" id="layer-KNLRiceb" class="acetate-layer">
+                        
+                        <!-- Set 3 -->
+                        <img src="KNLM1.png" id="layer-KNLM1" class="acetate-layer">
+                        <img src="KNLM2.png" id="layer-KNLM2" class="acetate-layer">
+                        <img src="KNLM3.png" id="layer-KNLM3" class="acetate-layer">
+                    </div>
+                </div>
+
+                <!-- Controls Below -->
+                <div class="controls">
+                    <div class="backlight-control">
+                        <label for="backlight-picker" style="font-weight: 600; color: #ddd;">Backlight:</label>
+                        <input type="color" id="backlight-picker" value="#ffffff">
+                        <button onclick="resetViewer()" class="reset-btn">Clear Canvas</button>
+                    </div>
+
+                    <div class="controls-grid">
+                        <div class="control-group">
+                            <h3>Set 1: Map & Poetry</h3>
+                            <label class="layer-toggle">
+                                <input type="checkbox" data-target="KNLDiliman" checked> 
+                                Diliman Fern
+                            </label>
+                            <label class="layer-toggle">
+                                <input type="checkbox" data-target="KNLLigas" checked> 
+                                Ligas Tree
+                            </label>
+                            <label class="layer-toggle">
+                                <input type="checkbox" data-target="KNLRice" checked> 
+                                Rice
+                            </label>
+                        </div>
+
+                        <div class="control-group">
+                            <h3>Set 2: Alt Names</h3>
+                            <label class="layer-toggle">
+                                <input type="checkbox" data-target="KNLDilimanb"> 
+                                Diliman (Dark)
+                            </label>
+                            <label class="layer-toggle">
+                                <input type="checkbox" data-target="KNLLigasb"> 
+                                Ligas (Dark)
+                            </label>
+                            <label class="layer-toggle">
+                                <input type="checkbox" data-target="KNLRiceb"> 
+                                Rice (Dark)
+                            </label>
+                        </div>
+
+                        <div class="control-group">
+                            <h3>Set 3: Lost Plants</h3>
+                            <label class="layer-toggle">
+                                <input type="checkbox" data-target="KNLM1"> 
+                                Mulberry
+                            </label>
+                            <label class="layer-toggle">
+                                <input type="checkbox" data-target="KNLM2"> 
+                                Pungapong
+                            </label>
+                            <label class="layer-toggle">
+                                <input type="checkbox" data-target="KNLM3"> 
+                                Pongamia
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
         <section class="intro">
 		<img src="tk.jpg" style="width:100%;">
             <p>Tanim-Kalye is a new media research-art and poetry installation that reimagines the street map of Krus na Ligas as a living plant assemblage. Roads are recreated using color-inverted images of flora significant to the community’s history and ecology. A work of community co-creation, this piece was developed through consultation with Krus na Ligas residents, its local governing unit, and botanists from the UP Institute of Biology.</p>
 			<p>The project began with the name Krus na Ligas itself, which references a cross-shaped Ligas tree that once grew in the area. The artwork transforms the roads of Krus na Ligas into ghostly, surreal forms that evoke botanical specimens and x-rays. Rendered in a cyanotype-like style and fragmented into glyphs, the maps are suspended on acetate over a window at Carinderia Sefali. This allows sunlight or the restaurant's lights to illuminate them like lightboxes. A bundle of them are stacked on each other, so the glyphs layer on each other to form the map of Krus na Ligas's roads, which can be flipped through. The blue backgrounds also reference the protective talismans of Mediterranean and Middle Eastern cultures, imbuing the maps with a magical, protective function.</p>
-            <!--<p>The project began with the name Krus na Ligas itself, which references a cross-shaped Ligas tree that once grew in the area. In my own work relating to non-human existence, I began thinking about the botanical layer of Krus na Ligas, which also has its own history relating to plants and agriculture. I've also lived in Quezon City for a long time, in the Tandang Sora area and been a UP Student, so my experience of Quezon City is a forested feeling, which I wanted to talk about. Since the theme of the Quezon City Biennial was Ilalim/Ibabaw, which talked about transport systems and the over/under dynamic, I thought to link this idea to the streets of Krus na Ligas, turning them into plants. I rendered them in an electric, cyanotype-like style and fragmented them into glyphs. the maps are suspended on acetate over a window at Carinderia Sefali. This allows sunlight or the restaurant's lights to illuminate them like lightboxes. The deep blue backgrounds also reference the protective talismans of Mediterranean and Middle Eastern cultures, imbuing the maps with a magical, protective function.</p>-->
             <p>This piece is part of the exhibit “Ang Paglaho ng Bagong Mundo sa mga Araw ng Nakaraan“ for the 2025 Quezon City Biennial, which explores the theme of Ilalim/Ibabaw (Under/Over) as a metaphor for the city's layered urban experience.</p>
         </section>
 
@@ -146,5 +370,51 @@
 
     </main>
 
+    <script>
+        // Digital Acetate Viewer Logic
+        document.addEventListener('DOMContentLoaded', () => {
+            const checkboxes = document.querySelectorAll('.layer-toggle input[type="checkbox"]');
+            const colorPicker = document.getElementById('backlight-picker');
+            const screen = document.getElementById('projector-screen');
+
+            // Handle Layer Toggles
+            checkboxes.forEach(box => {
+                box.addEventListener('change', (e) => {
+                    const targetId = 'layer-' + e.target.getAttribute('data-target');
+                    const img = document.getElementById(targetId);
+                    if (img) {
+                        if (e.target.checked) {
+                            img.classList.add('visible');
+                        } else {
+                            img.classList.remove('visible');
+                        }
+                    }
+                });
+            });
+
+            // Handle Backlight Color
+            colorPicker.addEventListener('input', (e) => {
+                screen.style.backgroundColor = e.target.value;
+            });
+        });
+
+        function resetViewer() {
+            // Uncheck ALL checkboxes
+            const checkboxes = document.querySelectorAll('.layer-toggle input[type="checkbox"]');
+            checkboxes.forEach(box => {
+                if (box.checked) {
+                    box.checked = false;
+                    // Dispatch event to update visuals (hide images)
+                    const event = new Event('change');
+                    box.dispatchEvent(event);
+                }
+            });
+
+            // Reset backlight color
+            const colorPicker = document.getElementById('backlight-picker');
+            colorPicker.value = '#ffffff';
+            document.getElementById('projector-screen').style.backgroundColor = '#ffffff';
+        }
+    </script>
 </body>
 </html>

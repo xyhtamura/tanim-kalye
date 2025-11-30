@@ -262,3 +262,103 @@ audio {
 }
 */
 
+ #acetate-viewer {
+        margin-bottom: 2.5rem;
+        padding: 1.5rem;
+        border-radius: 12px;
+        border: 1px solid rgba(255,255,255,0.12);
+        background: radial-gradient(circle at top, rgba(255,255,255,0.06), transparent 55%);
+    }
+
+    #acetate-viewer h2 {
+        margin-top: 0;
+        margin-bottom: 0.25rem;
+    }
+
+    .acetate-caption {
+        margin-top: 0.25rem;
+        margin-bottom: 1rem;
+        font-size: 0.95rem;
+        opacity: 0.8;
+    }
+
+    .acetate-controls {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 1rem;
+        align-items: flex-start;
+        margin-bottom: 1rem;
+    }
+
+    .acetate-backlight {
+        min-width: 170px;
+        display: flex;
+        flex-direction: column;
+        gap: 0.4rem;
+        font-size: 0.9rem;
+    }
+
+    .acetate-backlight input[type="color"] {
+        width: 100%;
+        height: 2.2rem;
+        padding: 0;
+        border-radius: 8px;
+        border: 1px solid rgba(255,255,255,0.2);
+        background: transparent;
+        cursor: pointer;
+    }
+
+    .acetate-groups {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 1.5rem;
+        flex: 1;
+    }
+
+    .acetate-group h3 {
+        margin-top: 0;
+        margin-bottom: 0.4rem;
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        opacity: 0.75;
+    }
+
+    .acetate-group label {
+        display: block;
+        font-size: 0.9rem;
+        margin-bottom: 0.2rem;
+        cursor: pointer;
+        user-select: none;
+    }
+
+    .acetate-group input[type="checkbox"] {
+        margin-right: 0.4rem;
+    }
+
+    #acetate-stage-wrapper {
+        display: flex;
+        justify-content: center;
+    }
+
+    #acetate-stage {
+        position: relative;
+        width: 100%;
+        max-width: 480px; /* nice small/lightbox size */
+        aspect-ratio: 8.5 / 14; /* legal paper-ish */
+        border-radius: 12px;
+        overflow: hidden;
+        background: #001a33; /* this will be overridden by the color picker */
+        box-shadow: 0 12px 30px rgba(0,0,0,0.35);
+    }
+
+    .acetate-layer {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+        pointer-events: none;
+        transition: opacity 0.18s ease-in-out;
+    }
+
