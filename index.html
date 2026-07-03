@@ -7,17 +7,21 @@
     <link rel="stylesheet" href="style.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&family=Lexend:wght@300;400;600&family=Nunito:wght@300;400;600&family=Playfair+Display:wght@400;700&family=Space+Grotesk:wght@400;700&family=Syne+Mono&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Newsreader:ital,opsz,wght@0,6..72,300..500;1,6..72,300..500&family=Spline+Sans+Mono:wght@300..500&display=swap" rel="stylesheet">
     
     <style>
         /* Embedded styles for the Digital Acetate Viewer */
         .projector-section {
-            background: #1a1a1a; /* Dark background as requested */
-            color: #e0e0e0;
-            padding: 2rem;
-            border-radius: 12px;
-            margin-bottom: 3rem;
-            border: 1px solid #333;
+            padding: clamp(1.1rem, 3vw, 1.8rem);
+            border-radius: 22px;
+            background:
+                linear-gradient(145deg, rgba(143,179,232,0.12), rgba(4,7,20,0.28)),
+                linear-gradient(180deg, rgba(24,32,68,0.85), rgba(10,13,30,0.92));
+            border: 1px solid rgba(143,179,232,0.16);
+            box-shadow:
+                inset 0 1px 1px rgba(255,255,255,0.06),
+                inset 0 -18px 34px -24px rgba(4,7,20,0.8),
+                0 24px 60px -32px rgba(4,7,20,0.9);
         }
 
         .projector-interface {
@@ -38,16 +42,19 @@
         .projector-screen {
             position: relative;
             width: 100%;
-            /* New Aspect Ratio: 929px / 1317px */
-            aspect-ratio: 929 / 1317; 
+            /* Matches the acetate scans exactly: 929px / 1317px */
+            aspect-ratio: 929 / 1317;
             background-color: #ffffff; /* Default backlight */
-            box-shadow: 0 0 30px rgba(0,0,0,0.5); /* Stronger shadow for dark mode */
+            border-radius: 4px;
+            box-shadow:
+                0 0 34px rgba(143, 179, 232, 0.2),
+                0 18px 38px -20px rgba(4, 7, 20, 0.95),
+                inset 0 0 0 1px rgba(143, 179, 232, 0.25);
             transition: background-color 0.3s ease;
-            border: 1px solid #555;
             overflow: hidden;
         }
 
-        .acetate-layer {
+        .projector-screen .acetate-layer {
             position: absolute;
             top: 0;
             left: 0;
@@ -57,7 +64,11 @@
             pointer-events: none;
             opacity: 0;
             transition: opacity 0.4s ease;
-            mix-blend-mode: multiply; 
+            mix-blend-mode: multiply;
+            /* Neutralize the global .container img styling (margin caused a top gap) */
+            margin: 0;
+            border-radius: 0;
+            box-shadow: none;
         }
         
         .acetate-layer.visible {
@@ -68,51 +79,62 @@
         .controls {
             width: 100%;
             max-width: 900px;
-            background: #252525;
-            padding: 1.5rem;
-            border-radius: 8px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+            background: rgba(12, 16, 38, 0.55);
+            padding: 1.3rem 1.3rem 1.1rem;
+            border-radius: 14px;
+            border: 1px solid rgba(143, 179, 232, 0.12);
+            box-shadow: inset 0 1px 0 rgba(255,255,255,0.04);
             display: flex;
             flex-direction: column;
-            gap: 1.5rem;
+            gap: 1.3rem;
         }
 
         .controls-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
             gap: 2rem;
-            border-top: 1px solid #444;
-            padding-top: 1.5rem;
+            border-top: 1px solid rgba(143, 179, 232, 0.16);
+            padding-top: 1.3rem;
         }
 
         .control-group h3 {
-            font-family: 'Syne Mono', monospace;
-            font-size: 1rem;
-            margin-bottom: 1rem;
-            color: #9cdcfe; /* Light blue accent for headers */
+            font-family: var(--mono);
+            font-style: normal;
+            font-size: 0.72rem;
+            font-weight: 400;
+            margin: 0 0 0.9rem;
             text-transform: uppercase;
-            letter-spacing: 1px;
+            letter-spacing: 0.16em;
         }
+
+        /* Each set keeps its own accent, pulled from the acetates:
+           cyanotype blue / ligas pink / rice green */
+        .control-group:nth-child(1) h3 { color: var(--acetate); }
+        .control-group:nth-child(2) h3 { color: var(--ligas); }
+        .control-group:nth-child(3) h3 { color: var(--rice); }
+        .control-group:nth-child(1) input { accent-color: var(--acetate); }
+        .control-group:nth-child(2) input { accent-color: var(--ligas); }
+        .control-group:nth-child(3) input { accent-color: var(--rice); }
 
         .layer-toggle {
             display: flex;
             align-items: center;
             margin-bottom: 0.5rem;
             cursor: pointer;
-            font-family: 'Inter', sans-serif;
-            font-size: 0.9rem;
-            color: #ccc;
+            font-family: var(--mono);
+            font-size: 0.78rem;
+            letter-spacing: 0.04em;
+            color: var(--ink-dim);
             transition: color 0.2s;
+            user-select: none;
         }
-        
+
         .layer-toggle:hover {
-            color: white;
+            color: var(--paper);
         }
 
         .layer-toggle input {
             margin-right: 8px;
-            accent-color: #9cdcfe;
-            /* Default small size */
         }
 
         .backlight-control {
@@ -124,17 +146,26 @@
         }
 
         .reset-btn {
-            background: #444; 
-            color: white; 
-            border: 1px solid #555; 
-            padding: 6px 12px; 
-            border-radius: 4px; 
-            cursor: pointer; 
-            font-size: 0.85rem;
+            background: var(--paper);
+            color: var(--ground);
+            border: 0;
+            padding: 7px 16px;
+            border-radius: 99px;
+            cursor: pointer;
+            font-family: var(--mono);
+            font-size: 0.68rem;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
             margin-left: auto; /* Pushes it to the right if in flex */
+            box-shadow: 0 2px 10px rgba(4, 7, 20, 0.55);
+            transition: background 0.2s, transform 0.15s;
         }
         .reset-btn:hover {
-            background: #555;
+            background: var(--ligas);
+            color: var(--paper);
+        }
+        .reset-btn:active {
+            transform: scale(0.96);
         }
 
         /* Mobile adjustment */
@@ -150,11 +181,13 @@
 
     <main class="container">
         <header>
+            <p class="eyebrow">xyh tamura</p>
             <h1>Tanim-Kalye</h1>
-            <p class="artist-name">
-               Xyh Tamura
+            <p class="subtitle">the street map of Krus na Ligas, replanted as flora</p>
+            <p class="metadata">
+                <time datetime="2025-09-13">2025-09-13</time> – <time datetime="2025-09-20">2025-09-20</time><span class="dot" aria-hidden="true">·</span>printed acetate, pins, nylon string<span class="dot" aria-hidden="true">·</span>Carinderia Sefali, Brgy. Krus na Ligas, Quezon City
             </p>
-            
+
             <p class="collaborators">
                 with input and collaboration from Krus na Ligas residents: Brisa Amir, Delle A. Castillo · Krus na Ligas Barangay Officials: former Barangay Captain Julian B. Santos, Barangay Secretary Jonathan C. Sombrero · UP Institute of Biology: Jayson A. Mansibang, The Jose Vera Santos Memorial Herbarium · Carinderia Sefali
             </p>
@@ -166,8 +199,8 @@
 
         <!-- DIGITAL VIEWER SECTION -->
         <section class="projector-section">
-            <p style="text-align: center; margin-bottom: 2rem; color: #aaa; font-size: 0.9rem;">
-                Toggle layers to overlay maps. Change backlight to simulate viewing conditions.
+            <p style="text-align: center; margin-bottom: 1.6rem; color: var(--ink-dim); font-family: var(--mono); font-size: 0.72rem; letter-spacing: 0.05em;">
+                toggle layers to overlay maps · change backlight to simulate viewing conditions
             </p>
             
             <div class="projector-interface">
@@ -194,7 +227,7 @@
                 <!-- Controls Below -->
                 <div class="controls">
                     <div class="backlight-control">
-                        <label for="backlight-picker" style="font-weight: 600; color: #ddd;">Backlight:</label>
+                        <label for="backlight-picker" style="font-family: var(--mono); font-size: 0.72rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-dim);">Backlight</label>
                         <input type="color" id="backlight-picker" value="#ffffff">
                         <button onclick="resetViewer()" class="reset-btn">Clear Canvas</button>
                     </div>
@@ -255,17 +288,22 @@
         <section class="intro">
 		<img src="tk.jpg" style="width:100%;">
             <p>Tanim-Kalye is a new media research-art and poetry installation that reimagines the street map of Krus na Ligas as a living plant assemblage. Roads are recreated using color-inverted images of flora significant to the community’s history and ecology. A work of community co-creation, this piece was developed through consultation with Krus na Ligas residents, its local governing unit, and botanists from the UP Institute of Biology.</p>
-			<p>The project began with the name Krus na Ligas itself, which references a cross-shaped Ligas tree that once grew in the area. The artwork transforms the roads of Krus na Ligas into ghostly, surreal forms that evoke botanical specimens and x-rays. Rendered in a cyanotype-like style and fragmented into glyphs, the maps are suspended on acetate over a window at Carinderia Sefali. This allows sunlight or the restaurant's lights to illuminate them like lightboxes. A bundle of them are stacked on each other, so the glyphs layer on each other to form the map of Krus na Ligas's roads, which can be flipped through. The blue backgrounds also reference the protective talismans of Mediterranean and Middle Eastern cultures, imbuing the maps with a magical, protective function.</p>
-            <p>This piece is part of the exhibit “Ang Paglaho ng Bagong Mundo sa mga Araw ng Nakaraan“ for the 2025 Quezon City Biennial, which explores the theme of Ilalim/Ibabaw (Under/Over) as a metaphor for the city's layered urban experience.</p>
+			<p>The project began with the name Krus na Ligas itself, which references a cross-shaped Ligas tree that once grew in the area. The artwork transforms the roads of Krus na Ligas into ghostly, surreal forms that evoke botanical specimens and x-rays. Rendered in a cyanotype-like style and fragmented into glyphs, the maps were suspended on acetate over a window at Carinderia Sefali. This allowed sunlight or the restaurant's lights to illuminate them like lightboxes. A bundle of them were stacked on each other, so the glyphs layered on each other to form the map of Krus na Ligas's roads, which could be flipped through. The blue backgrounds also reference the protective talismans of Mediterranean and Middle Eastern cultures, imbuing the maps with a magical, protective function.</p>
+            <p>This piece was part of the exhibit “Ang Paglaho ng Bagong Mundo sa mga Araw ng Nakaraan“ for the 2025 Quezon City Biennial, which explored the theme of Ilalim/Ibabaw (Under/Over) as a metaphor for the city's layered urban experience. The exhibit ran from September 13 to 20, 2025 at Brgy. Krus na Ligas, Diliman, Quezon City.</p>
+
+            <div class="poster-row">
+                <img src="paglaho01.jpeg" alt="Instagram mini poster for Ang Paglaho ng Bagong Mundo sa mga Araw ng Nakaraan, September 13, 2025, Brgy. Krus na Ligas">
+                <img src="paglaho02.jpg" alt="Instagram mini poster for Ang Paglaho ng Bagong Mundo sa mga Araw ng Nakaraan, second poster">
+            </div>
         </section>
 
         <section>
             <h2>The Installation: Three Series</h2>
-            <p>The work is presented in three distinct series, each printed on acetate sheets that invite interaction.</p>
+            <p>The work was presented in three distinct series, each printed on acetate sheets that invited interaction.</p>
             
             <h3>A Map with Poetry</h3>
 			<img src="flippable.jpg" style="width:33%;">
-            <p>This series consists of three superimposed layers that form a partial map of Krus na Ligas and a complete/fragmentable poem. Viewers can flip through the acetates, reading poetic fragments on each page, and three crucial plants:</p>
+            <p>This series consists of three superimposed layers that form a partial map of Krus na Ligas and a complete/fragmentable poem. Viewers could flip through the acetates, reading poetic fragments on each page, and three crucial plants:</p>
             <ul>
                 <li>The Diliman Fern: A blue map with red accents, representing the area's native flora, an one of the possible namesakes of the Diliman area.</li>
                 <li>The Ligas Tree: A pink/red map, nodding to both the tree's poisonous nature and Richard Mosse’s infrared photography of war, connecting it to the Katipuneros' history.</li>
@@ -368,14 +406,32 @@
             </p>
         </section>
 
+        <footer>
+            <p>street map as plant assemblage · printed acetate, pins, nylon string · 2025 quezon city biennial · ilalim/ibabaw</p>
+        </footer>
+
     </main>
 
     <script>
         // Digital Acetate Viewer Logic
+        const DEFAULT_BACKLIGHT = '#ffffff';
+
         document.addEventListener('DOMContentLoaded', () => {
             const checkboxes = document.querySelectorAll('.layer-toggle input[type="checkbox"]');
             const colorPicker = document.getElementById('backlight-picker');
             const screen = document.getElementById('projector-screen');
+
+            // Sync layers to checkbox state on load. Set 1 (Diliman Fern, Ligas
+            // Tree, Rice) is checked in the markup; this also repairs desyncs
+            // when the browser restores old checkbox state on reload.
+            checkboxes.forEach(box => {
+                const img = document.getElementById('layer-' + box.getAttribute('data-target'));
+                if (img) {
+                    img.classList.toggle('visible', box.checked);
+                }
+            });
+            colorPicker.value = DEFAULT_BACKLIGHT;
+            screen.style.backgroundColor = DEFAULT_BACKLIGHT;
 
             // Handle Layer Toggles
             checkboxes.forEach(box => {
@@ -396,7 +452,92 @@
             colorPicker.addEventListener('input', (e) => {
                 screen.style.backgroundColor = e.target.value;
             });
+
+            buildAudioPlayers();
         });
+
+        // Custom audio players — native controls stay as the no-JS fallback
+        const PLAY_ICON = '<svg width="13" height="14" viewBox="0 0 13 14" aria-hidden="true"><path d="M1.5 1.2v11.6L12 7z" fill="currentColor"/></svg>';
+        const PAUSE_ICON = '<svg width="12" height="14" viewBox="0 0 12 14" aria-hidden="true"><rect x="1" y="1" width="3.4" height="12" fill="currentColor"/><rect x="7.6" y="1" width="3.4" height="12" fill="currentColor"/></svg>';
+
+        function formatTime(s) {
+            if (!isFinite(s)) return '0:00';
+            const m = Math.floor(s / 60);
+            const ss = String(Math.floor(s % 60)).padStart(2, '0');
+            return m + ':' + ss;
+        }
+
+        function buildAudioPlayers() {
+            const audios = document.querySelectorAll('.media-item audio');
+
+            audios.forEach(audio => {
+                audio.removeAttribute('controls');
+                audio.preload = 'metadata';
+
+                const wrap = document.createElement('div');
+                wrap.className = 'ak-player';
+
+                const btn = document.createElement('button');
+                btn.type = 'button';
+                btn.className = 'ak-btn';
+                btn.innerHTML = PLAY_ICON;
+                btn.setAttribute('aria-label', 'Play');
+
+                const track = document.createElement('div');
+                track.className = 'ak-track';
+                const fill = document.createElement('div');
+                fill.className = 'ak-fill';
+                track.appendChild(fill);
+
+                const time = document.createElement('span');
+                time.className = 'ak-time';
+                time.textContent = '0:00 / 0:00';
+
+                wrap.append(btn, track, time);
+                audio.insertAdjacentElement('beforebegin', wrap);
+
+                const updateTime = () => {
+                    time.textContent = formatTime(audio.currentTime) + ' / ' + formatTime(audio.duration);
+                    const pct = audio.duration ? (audio.currentTime / audio.duration) * 100 : 0;
+                    fill.style.width = pct + '%';
+                };
+
+                btn.addEventListener('click', () => {
+                    if (audio.paused) {
+                        // one voice at a time
+                        audios.forEach(a => { if (a !== audio) a.pause(); });
+                        audio.play();
+                    } else {
+                        audio.pause();
+                    }
+                });
+
+                audio.addEventListener('play', () => {
+                    btn.innerHTML = PAUSE_ICON;
+                    btn.setAttribute('aria-label', 'Pause');
+                });
+                audio.addEventListener('pause', () => {
+                    btn.innerHTML = PLAY_ICON;
+                    btn.setAttribute('aria-label', 'Play');
+                });
+                audio.addEventListener('timeupdate', updateTime);
+                audio.addEventListener('loadedmetadata', updateTime);
+                audio.addEventListener('ended', () => {
+                    audio.currentTime = 0;
+                    updateTime();
+                });
+
+                const seek = (e) => {
+                    const rect = track.getBoundingClientRect();
+                    const ratio = Math.min(1, Math.max(0, (e.clientX - rect.left) / rect.width));
+                    if (isFinite(audio.duration)) {
+                        audio.currentTime = ratio * audio.duration;
+                        updateTime();
+                    }
+                };
+                track.addEventListener('click', seek);
+            });
+        }
 
         function resetViewer() {
             // Uncheck ALL checkboxes
@@ -412,8 +553,8 @@
 
             // Reset backlight color
             const colorPicker = document.getElementById('backlight-picker');
-            colorPicker.value = '#ffffff';
-            document.getElementById('projector-screen').style.backgroundColor = '#ffffff';
+            colorPicker.value = DEFAULT_BACKLIGHT;
+            document.getElementById('projector-screen').style.backgroundColor = DEFAULT_BACKLIGHT;
         }
     </script>
 </body>
